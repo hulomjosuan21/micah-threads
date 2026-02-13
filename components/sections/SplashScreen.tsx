@@ -79,13 +79,11 @@ export default function SplashScreen({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35 }}
-          className={`fixed inset-0 z-100 ${backgroundClass} flex items-center justify-center pointer-events-auto`}
+          className={`fixed inset-0 z-100 ${backgroundClass} flex items-center justify-center pointer-events-auto h-svh`}
         >
           <div className="flex flex-col items-center gap-4">
-            {/* Lottie mount point (optional) */}
             <div ref={containerRef} className="w-36 h-36" />
 
-            {/* Fallback/logo while Lottie loads or absent */}
             <div className="w-16 h-16">
               <Image src={logo} alt="Micah Threads" className="rounded-full" />
             </div>
