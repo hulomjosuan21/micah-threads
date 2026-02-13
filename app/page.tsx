@@ -1,42 +1,35 @@
 "use client";
 import useScroll from "@/hooks/use-scroll";
 import HeroSection from "@/components/sections/HeroSection";
-import SectionTwo from "@/components/sections/SectionTwo";
+import CategoriesSection from "@/components/sections/CategoriesSection";
 import { LayoutGroup, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import SplashScreen from "@/components/sections/SplashScreen";
 
 export default function Home() {
-  const { containerRef, isLastPage, currentIndex, handleScroll, scrollDirect } =
+  const { containerRef, currentIndex, handleScroll, scrollDirect } =
     useScroll();
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    // Optionally skip splash on subsequent navigations within session
     const seen = sessionStorage.getItem("seenSplash") === "true";
-    if (seen) {
-      setShowSplash(false);
-    } else {
-      // SplashScreen will call setShowSplash(false) via onFinish
-      // and mark sessionStorage flag
-      setShowSplash(true);
-    }
+    setShowSplash(!seen);
   }, []);
 
-  return (
-    <div className="relative h-svh w-full overflow-hidden">
-      {/* Splash overlay */}
+  if (showSplash) {
+    return (
       <SplashScreen
         onFinish={() => {
           sessionStorage.setItem("seenSplash", "true");
           setShowSplash(false);
         }}
-        // Provide animationData when available (Lottie JSON)
-        // animationData={require("@/assets/test/splash.json")}
         minDurationMs={1000}
-        backgroundClass="bg-white"
       />
+    );
+  }
 
+  return (
+    <div className="relative h-svh w-full overflow-hidden">
       <main
         ref={containerRef}
         onScroll={handleScroll}
@@ -44,17 +37,13 @@ export default function Home() {
       >
         <LayoutGroup>
           <section className="h-svh w-full shrink-0 snap-start">
-            <AnimatePresence mode="wait" initial={false}>
-              {currentIndex === 0 && (
-                <HeroSection key="section-1" scrollDirect={scrollDirect} />
-              )}
-            </AnimatePresence>
+            {currentIndex === 0 && (
+              <HeroSection key="section-1" scrollDirect={scrollDirect} />
+            )}
           </section>
 
           <section className="h-svh w-full shrink-0 snap-start">
-            <AnimatePresence mode="wait" initial={false}>
-              {currentIndex === 1 && <SectionTwo key="section-2" />}
-            </AnimatePresence>
+            {currentIndex === 1 && <CategoriesSection key="section-2" />}
           </section>
         </LayoutGroup>
       </main>

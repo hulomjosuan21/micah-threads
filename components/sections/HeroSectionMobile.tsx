@@ -5,7 +5,7 @@ import shape2 from "@/assets/shapes/rect2.svg";
 import imageFeature from "@/assets/images/feature-img.jpg";
 import logo from "@/assets/micah-logo.png";
 import { ThumbsRow } from "./ThumbsRow";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ListCheck, LogIn, ShoppingCart } from "lucide-react";
 import useScroll from "@/hooks/use-scroll";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -99,9 +99,10 @@ export function MobileHero({
     show: { opacity: 1, y: 0 },
   };
 
+  const isSignedUp = false;
+
   return (
     <section className="">
-      {/* Changed to Grid Layout */}
       <div className="grid grid-cols-1 w-full">
         <motion.div
           className="relative w-full px-10 pt-12"
@@ -142,23 +143,46 @@ export function MobileHero({
           </motion.p>
 
           <motion.div className="mt-8 flex gap-3 w-full" variants={fromRight}>
-            <Button
-              className="flex-1 rounded-full py-6 text-base cursor-pointer"
-              onClick={() => {
-                console.log("Shop Now clicked");
-                scrollDirect("down");
-              }}
-            >
-              <ShoppingCart size={16} />
-              Shop Now
-            </Button>
-            <Button
-              variant="secondary"
-              className="flex-1 rounded-full py-6 text-base cursor-pointer"
-            >
-              <Heart size={16} />
-              Explore Story
-            </Button>
+            {isSignedUp ? (
+              <>
+                <Button
+                  className="flex-1 rounded-full py-6 text-base cursor-pointer"
+                  onClick={() => {
+                    console.log("Shop Now clicked");
+                    scrollDirect("down");
+                  }}
+                >
+                  <ShoppingCart size={16} />
+                  Shop Now
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="flex-1 rounded-full py-6 text-base cursor-pointer"
+                >
+                  <Heart size={16} />
+                  Explore Story
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  className="flex-1 rounded-full py-6 text-base cursor-pointer"
+                  onClick={() => {
+                    console.log("Shop Now clicked");
+                  }}
+                >
+                  <LogIn size={16} />
+                  Sign in
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="flex-1 rounded-full py-6 text-base cursor-pointer"
+                >
+                  <ListCheck size={16} />
+                  Sign up
+                </Button>
+              </>
+            )}
           </motion.div>
         </motion.div>
       </div>

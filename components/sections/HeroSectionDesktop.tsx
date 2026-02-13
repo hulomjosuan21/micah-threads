@@ -6,7 +6,7 @@ import logo from "@/assets/micah-logo.png";
 import { ThumbsRow } from "./ThumbsRow";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Heart, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 
 function MaskedShapeImageDesktop({ className }: { className?: string }) {
   return (
@@ -79,11 +79,6 @@ export function DesktopHero({
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 12 },
-    show: { opacity: 1, y: 0 },
-  };
-
   const fromLeft = {
     hidden: { opacity: 0, x: -24 },
     show: { opacity: 1, x: 0 },
@@ -147,7 +142,7 @@ export function DesktopHero({
 
             <motion.div className="flex gap-4 pt-2" variants={fromRight}>
               <Button className="rounded-full px-9 py-6 text-sm font-medium transition">
-                <ShoppingCart size={16} />
+                <ShoppingBag size={16} />
                 Shop Now
               </Button>
 
