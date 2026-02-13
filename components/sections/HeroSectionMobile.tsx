@@ -1,91 +1,166 @@
 "use client";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import shape2 from "@/assets/shapes/rect2.svg";
 import imageFeature from "@/assets/images/feature-img.jpg";
-import item1Image from "@/assets/images/item1.png";
-import item2Image from "@/assets/images/item2.png";
-import item3Image from "@/assets/images/item3.png";
-import { Button } from "@/components/ui/button";
 import logo from "@/assets/micah-logo.png";
+import { ThumbsRow } from "./ThumbsRow";
+import { Heart, ShoppingCart } from "lucide-react";
+import useScroll from "@/hooks/use-scroll";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-export default function HeroMobile() {
+function MaskedShapeImageMobile({ className }: { className?: string }) {
   return (
-    <section className="w-full px-6 text-center">
-      {/* LOGO TOP */}
-      <div className="flex justify-center mb-6">
-        <Image src={logo} alt="Micah Threads Logo" className="h-10 w-auto" />
+    <motion.div
+      layoutId="shared-image"
+      className={`relative w-full pointer-events-none ${className ?? ""}`}
+    >
+      <Image
+        src={shape2}
+        alt="shape reference"
+        className="w-full h-auto opacity-0 pointer-events-none"
+      />
+
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          maskImage: `url(${shape2.src})`,
+          WebkitMaskImage: `url(${shape2.src})`,
+          maskSize: "100% 100%",
+          WebkitMaskSize: "100% 100%",
+          maskRepeat: "no-repeat",
+        }}
+      >
+        <Image
+          src={imageFeature}
+          alt="Feature image"
+          fill
+          className="object-cover"
+        />
       </div>
 
-      {/* IMAGE WITH MOBILE SHAPE */}
-      <div className="relative flex justify-center mb-6">
-        <div className="relative w-full max-w-xs">
-          <Image src={shape2} alt="shape mobile" className="w-full h-auto" />
-
-          {/* Masked Image */}
-          <div
-            className="absolute inset-0"
-            style={{
-              maskImage: `url(${shape2.src})`,
-              WebkitMaskImage: `url(${shape2.src})`,
-              maskSize: "contain",
-              WebkitMaskSize: "contain",
-              maskRepeat: "no-repeat",
-              WebkitMaskRepeat: "no-repeat",
-              maskPosition: "center",
-              WebkitMaskPosition: "center",
-            }}
-          >
-            <Image
-              src={imageFeature}
-              alt="Feature"
-              className="w-full h-full object-cover"
-              priority
-            />
-          </div>
-
-          {/* NEW inside shape */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-1 rounded-full text-sm font-bold">
-            NEW
-          </div>
+      <div className="absolute right-[1%] -top-[8%] z-20 pointer-events-none">
+        <div className="w-16 h-16">
+          <Image src={logo} alt="Micah Threads" className="rounded-full" />
         </div>
       </div>
 
-      {/* SMALL ITEM IMAGES */}
-      <div className="flex justify-center space-x-3 mb-4">
-        <Image
-          src={item1Image}
-          alt="Item 1"
-          className="w-10 h-10 rounded-lg object-cover"
-        />
-        <Image
-          src={item2Image}
-          alt="Item 2"
-          className="w-10 h-10 rounded-lg object-cover"
-        />
-        <Image
-          src={item3Image}
-          alt="Item 3"
-          className="w-10 h-10 rounded-lg object-cover"
-        />
+      <div className="absolute bottom-2 right-10 z-20 pointer-events-none">
+        <span className="font-black text-3xl drop-shadow-md text-white tracking-tight">
+          New
+        </span>
       </div>
 
-      <h1 className="text-3xl font-bold leading-tight text-black mb-3">
-        Where Purpose <span className="text-[#c58aa5]">Meets Style.</span>
-      </h1>
+      <div className="absolute bottom-[-4%] left-2 z-30 pointer-events-auto">
+        <ThumbsRow />
+      </div>
+    </motion.div>
+  );
+}
 
-      <p className="text-gray-600 mb-4">
-        Thoughtfully crafted apparel designed for comfort, confidence, and
-        conscious living. Micah Threads blends timeless aesthetics with modern
-        craftsmanship—because what you wear should feel as good as it looks.
-      </p>
+export function MobileHero({
+  scrollDirect,
+}: {
+  scrollDirect: (direction: "up" | "down") => void;
+}) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const handleShowNow = () => {
+    scrollDirect("down");
+  };
 
-      <div className="flex flex-col gap-3">
-        <Button className="bg-[#c58aa5] hover:bg-[#b17994] text-white rounded-full px-6">
-          Shop Now
-        </Button>
-        <Button variant="outline" className="rounded-full px-6">
-          Explore Our Story
-        </Button>
+  const containerVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.08, delayChildren: 0.08 },
+    },
+  };
+
+  const fromLeft = {
+    hidden: { opacity: 0, x: -24 },
+    show: { opacity: 1, x: 0 },
+  };
+
+  const fromRight = {
+    hidden: { opacity: 0, x: 24 },
+    show: { opacity: 1, x: 0 },
+  };
+
+  const fromTop = {
+    hidden: { opacity: 0, y: -24 },
+    show: { opacity: 1, y: 0 },
+  };
+
+  const fromBottom = {
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0 },
+  };
+
+  return (
+    <section className="">
+      {/* Changed to Grid Layout */}
+      <div className="grid grid-cols-1 w-full">
+        <motion.div
+          className="relative w-full px-10 pt-12"
+          variants={fromLeft}
+          initial={mounted ? "hidden" : false}
+          animate={mounted ? "show" : undefined}
+          key={mounted ? "hero-img-mounted" : "hero-img-ssr"}
+        >
+          <MaskedShapeImageMobile />
+        </motion.div>
+
+        <motion.div
+          className="relative z-50 px-6 mt-8"
+          variants={containerVariants}
+          initial={mounted ? "hidden" : false}
+          animate={mounted ? "show" : undefined}
+          key={mounted ? "hero-mobile-mounted" : "hero-mobile-ssr"}
+        >
+          <motion.div variants={fromTop}>
+            <motion.h1
+              layout
+              layoutId="shared-title"
+              initial={false}
+              transition={{ type: "spring", stiffness: 240, damping: 28 }}
+              className="text-2xl text-center font-black leading-none text-black tracking-tight"
+            >
+              Where Purpose
+              <span className="text-primary"> Meets Style.</span>
+            </motion.h1>
+          </motion.div>
+
+          <motion.p
+            className="mt-4 text-slate-600 leading-relaxed text-center text-sm"
+            variants={fromBottom}
+          >
+            Thoughtfully crafted apparel designed for comfort, confidence, and
+            conscious living.
+          </motion.p>
+
+          <motion.div className="mt-8 flex gap-3 w-full" variants={fromRight}>
+            <Button
+              className="flex-1 rounded-full py-6 text-base cursor-pointer"
+              onClick={() => {
+                console.log("Shop Now clicked");
+                scrollDirect("down");
+              }}
+            >
+              <ShoppingCart size={16} />
+              Shop Now
+            </Button>
+            <Button
+              variant="secondary"
+              className="flex-1 rounded-full py-6 text-base cursor-pointer"
+            >
+              <Heart size={16} />
+              Explore Story
+            </Button>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

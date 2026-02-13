@@ -1,96 +1,178 @@
-"use client";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import shape1 from "@/assets/shapes/rect1.svg";
 import imageFeature from "@/assets/images/feature-img.jpg";
-import item1Image from "@/assets/images/item1.png";
-import item2Image from "@/assets/images/item2.png";
-import item3Image from "@/assets/images/item3.png";
-import { Button } from "@/components/ui/button";
 import logo from "@/assets/micah-logo.png";
+import { ThumbsRow } from "./ThumbsRow";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { Heart, ShoppingBag, ShoppingCart } from "lucide-react";
 
-export default function HeroDesktop() {
+function MaskedShapeImageDesktop({ className }: { className?: string }) {
   return (
-    <section className="w-full max-w-6xl px-6">
-      {/* LOGO AT TOP */}
-      <div className="flex justify-center lg:justify-start mb-6">
-        <Image src={logo} alt="Micah Threads Logo" className="h-10 w-auto" />
+    <motion.div
+      layoutId="shared-image"
+      className={`relative mx-auto ${className ?? ""}`}
+      style={{
+        height: "min(72vh, 640px)",
+        aspectRatio: "1 / 1",
+      }}
+    >
+      <Image
+        src={shape1}
+        alt="shape reference"
+        className="w-full h-full opacity-0 pointer-events-none select-none"
+        draggable={false}
+      />
+
+      <div
+        className="absolute inset-0"
+        style={{
+          maskImage: `url(${shape1.src})`,
+          WebkitMaskImage: `url(${shape1.src})`,
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+        }}
+      >
+        <Image
+          src={imageFeature}
+          alt="Feature image"
+          fill
+          priority
+          className="object-cover"
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        {/* LEFT CONTENT */}
-        <div className="flex flex-col space-y-6 text-left">
-          <div className="flex space-x-3">
-            <Image
-              src={item1Image}
-              alt="Item 1"
-              className="w-10 h-10 rounded-lg object-cover"
-            />
-            <Image
-              src={item2Image}
-              alt="Item 2"
-              className="w-10 h-10 rounded-lg object-cover"
-            />
-            <Image
-              src={item3Image}
-              alt="Item 3"
-              className="w-10 h-10 rounded-lg object-cover"
-            />
-          </div>
-
-          <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-black">
-            Where Purpose <span className="text-[#c58aa5]">Meets Style.</span>
-          </h1>
-
-          <p className="text-gray-600 max-w-xl">
-            Thoughtfully crafted apparel designed for comfort, confidence, and
-            conscious living. Micah Threads blends timeless aesthetics with
-            modern craftsmanship—because what you wear should feel as good as it
-            looks.
-          </p>
-
-          <div className="flex gap-4">
-            <Button className="bg-[#c58aa5] hover:bg-[#b17994] text-white rounded-full px-6">
-              Shop Now
-            </Button>
-            <Button variant="outline" className="rounded-full px-6">
-              Explore Our Story
-            </Button>
-          </div>
+      <div className="absolute right-[14%] -top-[10%] z-20">
+        <div className="w-12 h-12 lg:w-18 lg:h-18">
+          <Image src={logo} alt="Micah Threads" />
         </div>
+      </div>
 
-        {/* RIGHT IMAGE WITH SHAPE */}
-        <div className="relative flex justify-center">
-          <div className="relative w-full max-w-md lg:max-w-lg">
-            <Image src={shape1} alt="shape desktop" className="w-full h-auto" />
+      <div className="absolute bottom-[0.2%] left-[18%] z-20">
+        <span className="font-black text-2xl lg:text-4xl tracking-tight">
+          New
+        </span>
+      </div>
+    </motion.div>
+  );
+}
 
-            {/* Masked Image */}
-            <div
-              className="absolute inset-0"
-              style={{
-                maskImage: `url(${shape1.src})`,
-                WebkitMaskImage: `url(${shape1.src})`,
-                maskSize: "contain",
-                WebkitMaskSize: "contain",
-                maskRepeat: "no-repeat",
-                WebkitMaskRepeat: "no-repeat",
-                maskPosition: "center",
-                WebkitMaskPosition: "center",
-              }}
+export function DesktopHero({
+  scrollDirect,
+}: {
+  scrollDirect: (direction: "up" | "down") => void;
+}) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.08, delayChildren: 0.08 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: { opacity: 1, y: 0 },
+  };
+
+  const fromLeft = {
+    hidden: { opacity: 0, x: -24 },
+    show: { opacity: 1, x: 0 },
+  };
+
+  const fromRight = {
+    hidden: { opacity: 0, x: 24 },
+    show: { opacity: 1, x: 0 },
+  };
+
+  const fromTop = {
+    hidden: { opacity: 0, y: -24 },
+    show: { opacity: 1, y: 0 },
+  };
+
+  const fromBottom = {
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0 },
+  };
+
+  return (
+    <section className="h-screen flex items-center">
+      <div className="relative mx-auto w-full max-w-250 px-8">
+        <div className="max-w-140 pr-30">
+          <motion.div
+            className="flex flex-col gap-8"
+            variants={containerVariants}
+            initial={mounted ? "hidden" : false}
+            animate={mounted ? "show" : undefined}
+            key={mounted ? "hero-mounted" : "hero-ssr"}
+          >
+            <motion.div variants={fromLeft}>
+              <ThumbsRow />
+            </motion.div>
+
+            <motion.div variants={fromTop}>
+              <motion.h1
+                layout
+                layoutId="shared-title"
+                initial={false}
+                transition={{ type: "spring", stiffness: 240, damping: 28 }}
+                className="
+                font-black leading-[0.92] tracking-[-0.02em]
+                text-[clamp(2rem,4vw,4rem)]
+              "
+              >
+                Where Purpose
+                <br />
+                <span className="text-primary">Meets Style.</span>
+              </motion.h1>
+            </motion.div>
+
+            <motion.p
+              className="text-[17px] leading-relaxed text-gray-600"
+              variants={fromBottom}
             >
-              <Image
-                src={imageFeature}
-                alt="Feature"
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
+              Thoughtfully crafted apparel designed for comfort, confidence, and
+              conscious living. Micah Threads blends timeless aesthetics with
+              modern craftsmanship.
+            </motion.p>
 
-            {/* NEW inside shape (like your screenshot) */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white px-4 py-1 rounded-full text-sm font-bold">
-              NEW
-            </div>
-          </div>
+            <motion.div className="flex gap-4 pt-2" variants={fromRight}>
+              <Button className="rounded-full px-9 py-6 text-sm font-medium transition">
+                <ShoppingCart size={16} />
+                Shop Now
+              </Button>
+
+              <Button
+                variant="secondary"
+                className="rounded-full px-9 py-6 text-sm font-medium"
+              >
+                <Heart size={16} />
+                Explore Our Story
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
+
+        <motion.div
+          className="
+          absolute top-1/2 right-0 -translate-y-1/2
+          w-105 xl:w-120
+        "
+          variants={fromRight}
+          initial={mounted ? "hidden" : false}
+          animate={mounted ? "show" : undefined}
+        >
+          <MaskedShapeImageDesktop />
+        </motion.div>
       </div>
     </section>
   );
