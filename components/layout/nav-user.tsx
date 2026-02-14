@@ -23,10 +23,12 @@ import {
 } from "lucide-react";
 import { useTransition } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const isLoading = false;
+  const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
 
@@ -98,9 +100,12 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer">
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive cursor-pointer"
+              onSelect={() => router.push("/auth/sign-out")}
+            >
               <LogOut className="mr-2 size-4" />
-              {isPending ? "Logging out..." : "Log out"}
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
