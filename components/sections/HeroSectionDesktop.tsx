@@ -6,7 +6,9 @@ import logo from "@/assets/micah-logo.png";
 import { ThumbsRow } from "./ThumbsRow";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ListCheck, LogIn, ShoppingBag } from "lucide-react";
+import { User } from "@supabase/supabase-js";
+import useAuthNavigation from "@/hooks/use-navigate-auth";
 
 function MaskedShapeImageDesktop({ className }: { className?: string }) {
   return (
@@ -64,9 +66,12 @@ function MaskedShapeImageDesktop({ className }: { className?: string }) {
 
 export function DesktopHero({
   scrollDirect,
+  user,
 }: {
   scrollDirect: (direction: "up" | "down") => void;
+  user: User | null;
 }) {
+  const { handleNavigateSignUp, handleNavigatoSignIn } = useAuthNavigation();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
@@ -141,18 +146,41 @@ export function DesktopHero({
             </motion.p>
 
             <motion.div className="flex gap-4 pt-2" variants={fromRight}>
-              <Button className="rounded-full px-9 py-6 text-sm font-medium transition">
-                <ShoppingBag size={16} />
-                Shop Now
-              </Button>
+              {user != null ? (
+                <>
+                  <Button className="rounded-full px-9 py-6 text-sm font-medium transition">
+                    <ShoppingBag size={16} />
+                    Shop Now
+                  </Button>
 
-              <Button
-                variant="secondary"
-                className="rounded-full px-9 py-6 text-sm font-medium"
-              >
-                <Heart size={16} />
-                Explore Our Story
-              </Button>
+                  <Button
+                    variant="secondary"
+                    className="rounded-full px-9 py-6 text-sm font-medium"
+                  >
+                    <Heart size={16} />
+                    Explore Our Story
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    className="rounded-full px-9 py-6 text-sm font-medium transition"
+                    onClick={handleNavigatoSignIn}
+                  >
+                    <LogIn size={16} />
+                    Sign in
+                  </Button>
+
+                  <Button
+                    variant="secondary"
+                    className="rounded-full px-9 py-6 text-sm font-medium"
+                    onClick={handleNavigateSignUp}
+                  >
+                    <ListCheck size={16} />
+                    Sign up
+                  </Button>
+                </>
+              )}
             </motion.div>
           </motion.div>
         </div>

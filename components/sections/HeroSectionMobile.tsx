@@ -6,9 +6,10 @@ import imageFeature from "@/assets/images/feature-img.jpg";
 import logo from "@/assets/micah-logo.png";
 import { ThumbsRow } from "./ThumbsRow";
 import { Heart, ListCheck, LogIn, ShoppingCart } from "lucide-react";
-import useScroll from "@/hooks/use-scroll";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
+import useAuthNavigation from "@/hooks/use-navigate-auth";
 
 function MaskedShapeImageMobile({ className }: { className?: string }) {
   return (
@@ -61,14 +62,15 @@ function MaskedShapeImageMobile({ className }: { className?: string }) {
 
 export function MobileHero({
   scrollDirect,
+  user,
 }: {
   scrollDirect: (direction: "up" | "down") => void;
+  user: User | null;
 }) {
   const [mounted, setMounted] = useState(false);
+  const { handleNavigateSignUp, handleNavigatoSignIn } = useAuthNavigation();
+
   useEffect(() => setMounted(true), []);
-  const handleShowNow = () => {
-    scrollDirect("down");
-  };
 
   const containerVariants = {
     hidden: { opacity: 0, y: 12 },
@@ -98,8 +100,6 @@ export function MobileHero({
     hidden: { opacity: 0, y: 24 },
     show: { opacity: 1, y: 0 },
   };
-
-  const isSignedUp = false;
 
   return (
     <section className="">
@@ -143,7 +143,7 @@ export function MobileHero({
           </motion.p>
 
           <motion.div className="mt-8 flex gap-3 w-full" variants={fromRight}>
-            {isSignedUp ? (
+            {user != null ? (
               <>
                 <Button
                   className="flex-1 rounded-full py-6 text-base cursor-pointer"
@@ -167,9 +167,7 @@ export function MobileHero({
               <>
                 <Button
                   className="flex-1 rounded-full py-6 text-base cursor-pointer"
-                  onClick={() => {
-                    console.log("Shop Now clicked");
-                  }}
+                  onClick={handleNavigatoSignIn}
                 >
                   <LogIn size={16} />
                   Sign in
@@ -177,6 +175,7 @@ export function MobileHero({
                 <Button
                   variant="secondary"
                   className="flex-1 rounded-full py-6 text-base cursor-pointer"
+                  onClick={handleNavigateSignUp}
                 >
                   <ListCheck size={16} />
                   Sign up

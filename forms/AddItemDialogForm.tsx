@@ -143,7 +143,7 @@ export default function AddItemDialogForm() {
 
       <DialogContent
         className={cn(
-          "max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden",
+          "max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden hide-close-button",
           isConfirmOpen &&
             "pointer-events-none opacity-0 transition-opacity duration-200",
         )}
@@ -344,7 +344,7 @@ export default function AddItemDialogForm() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
               {isSubmitting || addItemMutation.isPending
-                ? "Uploading..."
+                ? "Adding..."
                 : "Add Item"}
             </Button>
           </DialogFooter>
