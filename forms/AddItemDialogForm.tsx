@@ -35,6 +35,8 @@ import {
 import useCategoryOptions from "@/hooks/useCategory-option";
 import { Plus, Sparkles, Loader2 } from "lucide-react";
 import { ProductFormValues, productSchema } from "@/validators/item-validator";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertAction } from "@/components/reui/alert";
 
 const mockUploadFiles = async (files: any[]): Promise<string[]> => {
   await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -101,7 +103,10 @@ export default function AddItemDialogForm() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden">
+      <DialogContent
+        className="max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden"
+        aria-describedby={undefined}
+      >
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col flex-1 min-h-0"
@@ -126,17 +131,18 @@ export default function AddItemDialogForm() {
                   )}
                 </FieldGroup>
 
-                <div className="flex items-center justify-between p-3 border rounded-lg bg-muted/30">
-                  <div className="space-y-0.5">
-                    <FieldLabel className="text-base">
-                      Is this a variant?
-                    </FieldLabel>
-                    <p className="text-xs text-muted-foreground">
-                      Toggle to select an existing SKU series.
-                    </p>
-                  </div>
-                  <Switch checked={isVariant} onCheckedChange={setIsVariant} />
-                </div>
+                <Alert className="max-w-md">
+                  <AlertTitle>Is this a variant?</AlertTitle>
+                  <AlertDescription>
+                    Toggle to select an existing SKU series.
+                  </AlertDescription>
+                  <AlertAction>
+                    <Switch
+                      checked={isVariant}
+                      onCheckedChange={setIsVariant}
+                    />
+                  </AlertAction>
+                </Alert>
 
                 <FieldGroup className="grid grid-cols-2 gap-4">
                   <Field>
@@ -192,7 +198,7 @@ export default function AddItemDialogForm() {
                           readOnly
                           placeholder="SKU-12345"
                         />
-                        <Sparkles className="absolute right-3 top-2.5 size-4 text-blue-500 opacity-50" />
+                        <Sparkles className="absolute right-3 top-2.5 size-4 text-primary opacity-50" />
                       </div>
                     )}
                     {errors.itemCode && (
