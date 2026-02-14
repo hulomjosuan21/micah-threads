@@ -20,7 +20,7 @@ export default async function addItem(
       price: data.price,
       stock: data.stock,
       category_id: data.categoryId,
-      images_patchs: data.imagesPatchs,
+      images_paths: data.imagesPaths,
     })
     .select("created_at")
     .single();

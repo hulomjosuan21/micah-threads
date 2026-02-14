@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export type Item = {
   productId: string;
   itemName: string;
@@ -6,7 +8,11 @@ export type Item = {
   itemCode: string;
   price: number;
   stock: number;
-  imagesPatchs: string[];
+  imagesPaths: string[];
   createdAt: string;
   categoryId: string;
+};
+
+export type ItemRow = Omit<Item, "categoryId"> & {
+  category: Category;
 };

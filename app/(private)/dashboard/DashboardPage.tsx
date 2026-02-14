@@ -1,5 +1,6 @@
 "use client";
 import AppContent from "@/components/layout/app-content";
+import CategorySection from "./components/CategorySection";
 
 export default function DashboardPage() {
   return (
@@ -8,9 +9,12 @@ export default function DashboardPage() {
       description={"Your current dashboard overview"}
       actions={<></>}
     >
-      <pre>
-        <code></code>
-      </pre>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div></div>
+        <div></div>
+        <CategorySection />
+        <div></div>
+      </div>
     </AppContent>
   );
 }

@@ -1,8 +1,8 @@
 import Image from "next/image";
+import logo from "@/assets/micah-logo.png";
 import { Button } from "@/components/ui/button";
 import shape1 from "@/assets/shapes/rect1.svg";
 import imageFeature from "@/assets/images/feature-img.jpg";
-import logo from "@/assets/micah-logo.png";
 import { ThumbsRow } from "./ThumbsRow";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";

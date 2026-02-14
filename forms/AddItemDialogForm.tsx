@@ -128,7 +128,7 @@ export default function AddItemDialogForm() {
       price: Number(data.price),
       stock: Number(data.stock),
       categoryId: data.categoryId,
-      imagesPatchs: uploadedPaths as string[],
+      imagesPaths: uploadedPaths as string[],
     };
     addItemMutation.mutate(payload);
   };
@@ -143,7 +143,7 @@ export default function AddItemDialogForm() {
 
       <DialogContent
         className={cn(
-          "max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden hide-close-button",
+          "h-[85svh] flex flex-col p-0 overflow-hidden hide-close-button",
           isConfirmOpen &&
             "pointer-events-none opacity-0 transition-opacity duration-200",
         )}
@@ -186,7 +186,7 @@ export default function AddItemDialogForm() {
                   </AlertAction>
                 </Alert>
 
-                <FieldGroup className="grid grid-cols-2 gap-4">
+                <FieldGroup className="">
                   <Field>
                     <FieldLabel htmlFor="itemName">Item Name*</FieldLabel>
                     <Input

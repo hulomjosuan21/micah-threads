@@ -8,7 +8,7 @@ export default async function PrivatePagesLayout({
 }) {
   return (
     <SidebarProvider
-      className="h-screen overflow-hidden"
+      className="h-svh overflow-hidden"
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
