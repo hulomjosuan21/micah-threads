@@ -9,6 +9,8 @@ export default function useCategoryOptions() {
     initialData: [],
   });
 
+  console.log("Category options data:", JSON.stringify(data, null, 2));
+
   return {
     options: data,
     isError,
