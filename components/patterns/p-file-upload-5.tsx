@@ -77,30 +77,28 @@ export function FileUpload({
     multiple,
     initialFiles: [],
     onFilesChange: (newFiles) => {
-      const newUploadFiles = newFiles.map((file) => {
-        const existingFile = uploadFiles.find(
-          (existing) => existing.id === file.id,
-        );
+      setUploadFiles((prev) =>
+        newFiles.map((file) => {
+          const existingFile = prev.find((existing) => existing.id === file.id);
 
-        if (existingFile) {
-          return {
-            ...existingFile,
-            ...file, // Update any changed properties from the file
-          };
-        } else {
-          // New file - set to uploading
+          if (existingFile) {
+            return {
+              ...existingFile,
+              ...file,
+            };
+          }
+
           return {
             ...file,
             progress: 0,
             status: "uploading" as const,
           };
-        }
-      });
-      setUploadFiles(newUploadFiles);
+        }),
+      );
+
       onFilesChange?.(newFiles);
     },
   });
-
   // Simulate upload progress
   useEffect(() => {
     if (!simulateUpload) return;
@@ -227,7 +225,7 @@ export function FileUpload({
             </p>
           </div>
 
-          <Button onClick={openFileDialog}>
+          <Button onClick={openFileDialog} type="button">
             <UploadIcon className="h-4 w-4" />
             Select files
           </Button>
@@ -258,7 +256,12 @@ export function FileUpload({
             </div>
           </div>
 
-          <Button onClick={clearFiles} variant="outline" size="sm">
+          <Button
+            onClick={clearFiles}
+            variant="outline"
+            size="sm"
+            type="button"
+          >
             Clear all
           </Button>
         </div>
@@ -305,6 +308,7 @@ export function FileUpload({
                         variant="ghost"
                         size="icon"
                         className="text-muted-foreground size-6 hover:bg-transparent hover:opacity-100"
+                        type="button"
                       >
                         <XIcon className="size-4" />
                       </Button>
@@ -331,6 +335,7 @@ export function FileUpload({
                           variant="ghost"
                           size="icon"
                           className="text-muted-foreground size-6 hover:bg-transparent hover:opacity-100"
+                          type="button"
                         >
                           <RefreshCwIcon className="size-3.5" />
                         </Button>

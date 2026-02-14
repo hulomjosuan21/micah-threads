@@ -33,20 +33,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useCategoryOptions from "@/hooks/useCategory-option";
-import { Plus, Sparkles, Loader2 } from "lucide-react";
+import { Plus, Sparkles, Loader2, Check } from "lucide-react";
 import { ProductFormValues, productSchema } from "@/validators/item-validator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertAction } from "@/components/reui/alert";
-
-const mockUploadFiles = async (files: any[]): Promise<string[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  return files.map((f) => `https://cdn.example.com/uploads/${f.file.name}`);
-};
+import { supabaseUploadFile } from "@/lib/supabase/utils/file-upload";
+import { createClient } from "@/lib/supabase/client";
+import { useConfirm } from "@/hooks/use-confirm";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import { useMutation } from "@tanstack/react-query";
+import addItem from "@/actions/addItem";
+import { Item } from "@/types/item";
+import { toast } from "sonner";
+import { ToastResponse } from "@/types";
 
 export default function AddItemDialogForm() {
   const { options, isLoading: isCatsLoading } = useCategoryOptions();
   const [isVariant, setIsVariant] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { confirm, isOpen: isConfirmOpen } = useConfirm();
 
   const {
     register,
@@ -60,6 +66,7 @@ export default function AddItemDialogForm() {
     defaultValues: {
       itemName: "",
       variantLabel: "",
+      description: "",
       itemCode: "",
       price: 0,
       stock: 0,
@@ -77,22 +84,53 @@ export default function AddItemDialogForm() {
     }
   }, [itemName, isVariant, setValue]);
 
+  const resetForm = () => {
+    reset();
+    setIsOpen(false);
+  };
+
+  const addItemMutation = useMutation({
+    mutationFn: (item: Omit<Item, "productId" | "createdAt">) => addItem(item),
+    onSuccess: async (response: ToastResponse) => {
+      const { title, description } = response;
+      toast.success(title, {
+        description: (
+          <span className="text-muted-foreground">{description}</span>
+        ),
+      });
+      resetForm();
+    },
+    onError: (error) => {
+      console.error("Error adding item:", error);
+      toast.error("Failed to add item. Please try again.");
+    },
+  });
+
   const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
-    try {
-      const uploadedPaths = await mockUploadFiles(data.images);
+    const ok = await confirm({
+      title: "Confirm Item Creation",
+      message: `Are you sure you want to create the item "${data.itemName}"?`,
+    });
 
-      const payload = {
-        ...data,
-        imagesPatchs: uploadedPaths,
-        createdAt: new Date().toISOString(),
-      };
+    if (!ok) return;
+    const supabase = createClient();
+    const uploadedPaths = await Promise.all(
+      (data.images ?? [])
+        .filter((f) => f?.file instanceof File)
+        .map((f) => supabaseUploadFile(supabase, f.file, "items")),
+    );
 
-      console.log("Final Product Payload:", JSON.stringify(payload, null, 2));
-      reset();
-      setIsOpen(false);
-    } catch (error) {
-      console.error("Upload failed", error);
-    }
+    const payload: Omit<Item, "productId" | "createdAt"> = {
+      itemName: data.itemName,
+      variantLabel: data.variantLabel ?? null,
+      description: data.description ?? null,
+      itemCode: data.itemCode,
+      price: Number(data.price),
+      stock: Number(data.stock),
+      categoryId: data.categoryId,
+      imagesPatchs: uploadedPaths as string[],
+    };
+    addItemMutation.mutate(payload);
   };
 
   return (
@@ -104,7 +142,11 @@ export default function AddItemDialogForm() {
       </DialogTrigger>
 
       <DialogContent
-        className="max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden"
+        className={cn(
+          "max-w-2xl h-[85svh] flex flex-col p-0 overflow-hidden",
+          isConfirmOpen &&
+            "pointer-events-none opacity-0 transition-opacity duration-200",
+        )}
         aria-describedby={undefined}
       >
         <form
@@ -165,6 +207,17 @@ export default function AddItemDialogForm() {
                       id="variantLabel"
                       {...register("variantLabel")}
                       placeholder="e.g. Matte Black"
+                    />
+                  </Field>
+                </FieldGroup>
+
+                <FieldGroup className="">
+                  <Field>
+                    <FieldLabel htmlFor="description">Description</FieldLabel>
+                    <Textarea
+                      id="description"
+                      {...register("description")}
+                      placeholder="e.g. A beautiful handmade bouquet perfect for any occasion."
                     />
                   </Field>
                 </FieldGroup>
@@ -283,11 +336,16 @@ export default function AddItemDialogForm() {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting && (
+            <Button
+              type="submit"
+              disabled={isSubmitting || addItemMutation.isPending}
+            >
+              {(isSubmitting || addItemMutation.isPending) && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {isSubmitting ? "Uploading..." : "Add Item"}
+              {isSubmitting || addItemMutation.isPending
+                ? "Uploading..."
+                : "Add Item"}
             </Button>
           </DialogFooter>
         </form>
