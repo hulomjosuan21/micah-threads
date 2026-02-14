@@ -5,7 +5,6 @@ export default function useCategoryOptions() {
   const { data, isError, isLoading, error } = useQuery({
     queryKey: ["categories-options"],
     queryFn: fetchCategoriesOptions,
-    staleTime: Infinity,
     initialData: [],
   });
 
