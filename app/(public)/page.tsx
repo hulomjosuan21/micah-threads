@@ -36,7 +36,7 @@ export default function Home() {
         className="flex md:block h-svh w-full overflow-x-auto md:overflow-y-auto snap-x md:snap-y snap-mandatory scroll-smooth no-scrollbar"
       >
         <LayoutGroup>
-          <section className="h-svh w-full shrink-0 snap-start">
+          <section className="h-svh w-full shrink-0 snap-start font-stylish">
             {currentIndex === 0 && (
               <HeroSection key="section-1" scrollDirect={scrollDirect} />
             )}

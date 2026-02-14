@@ -1,12 +1,11 @@
 import React from "react";
-import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/micah-logo.png";
 
 interface Footer7Props {
   className?: string;
-  description?: string;
   socialLinks?: Array<{
     icon: React.ReactElement;
     href: string;
@@ -30,7 +29,7 @@ const defaultSocialLinks = [
 
 const Footer = ({
   socialLinks = defaultSocialLinks,
-  copyright = "© 2026 micah threads & josuan.cv. All rights reserved.",
+  copyright = "© 2026 josuan.cv & micah threads. All rights reserved.",
   className,
 }: Footer7Props) => {
   return (

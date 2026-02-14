@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
-import { Sora } from "next/font/google";
+import { Outfit, Sora } from "next/font/google";
 import "./globals.css";
 import Providers from "@/providers";
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+});
 
 const sora = Sora({
   variable: "--font-sora",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${sora.variable} ${sora.className} antialiased`}>
+      <body
+        className={`${outfit.variable} ${outfit.className} ${sora.variable} ${sora.className} antialiased`}
+      >
         <Providers>
           <main>{children}</main>
         </Providers>
