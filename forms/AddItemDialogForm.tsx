@@ -43,10 +43,10 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
-import addItem from "@/actions/addItem";
 import { Item } from "@/types/item";
 import { toast } from "sonner";
 import { ToastResponse } from "@/types";
+import addItem from "@/actions/item-actions";
 
 export default function AddItemDialogForm() {
   const { options, isLoading: isCatsLoading } = useCategoryOptions();

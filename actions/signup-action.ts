@@ -11,6 +11,9 @@ export async function signUpAction(data: SignupFormValues) {
   } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/sign-in?signup=true`,
+    },
   });
 
   if (error || !user) {

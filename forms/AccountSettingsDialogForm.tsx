@@ -92,7 +92,7 @@ export default function AccountSettingsDialog({ trigger }: Props) {
         {trigger ?? <Button variant="outline">Account Settings</Button>}
       </DialogTrigger>
 
-      <DialogContent className="max-w-lg p-0">
+      <DialogContent className="p-0">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader className="px-6 py-4 border-b">
             <DialogTitle>Account Settings</DialogTitle>

@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileUpload } from "@/components/patterns/p-file-upload-5";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,38 +21,18 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import useCategoryOptions from "@/hooks/useCategory-option";
-import { Plus, Sparkles, Loader2 } from "lucide-react";
-import { ProductFormValues, productSchema } from "@/validators/item-validator";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertAction } from "@/components/reui/alert";
-import { supabaseUploadFile } from "@/lib/supabase/utils/file-upload";
-import { createClient } from "@/lib/supabase/client";
+import { Plus } from "lucide-react";
 import { useConfirm } from "@/hooks/use-confirm";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
-import addItem from "@/actions/addItem";
-import { Item } from "@/types/item";
 import { toast } from "sonner";
-import { ToastResponse } from "@/types";
 import {
   createCategorySchema,
   NewCategoryFormValues,
 } from "@/validators/category-schema";
 import { Spinner } from "@/components/ui/spinner";
-import { addCategory } from "@/actions/addCategory";
 import queryClient from "@/lib/queryClient";
+import { addCategory } from "@/actions/category-actions";
 
 export default function AddCategoryDialogForm() {
   const [isOpen, setIsOpen] = useState(false);

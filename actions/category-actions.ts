@@ -1,6 +1,41 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
-import { CategoryWithItemCountRow } from "@/types/category";
+import { Category, CategoryWithItemCountRow } from "@/types/category";
+import { NewCategoryFormValues } from "@/validators/category-schema";
+
+export async function addCategory(data: NewCategoryFormValues) {
+  const supabase = await createClient();
+
+  const { label } = data;
+
+  const { error } = await supabase.from("categories").insert({
+    label,
+  });
+
+  if (error) {
+    console.error("Error adding category:", error);
+    throw new Error("Failed to add category");
+  }
+
+  return {
+    title: label,
+    description: `Added successfully!`,
+  };
+}
+
+export async function fetchCategoriesOptions(): Promise<Category[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("categories")
+    .select("categoryId:category_id, label");
+
+  if (error) {
+    throw error;
+  }
+
+  return (data ?? []) as Category[];
+}
 
 export async function fetchCategoriesWithItemCount(): Promise<
   CategoryWithItemCountRow[]

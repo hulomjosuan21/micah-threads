@@ -29,14 +29,26 @@ import {
 } from "@/validators/signin-schema";
 import { signInAction } from "@/actions/signin-action";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export function SignInForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const searchParams = useSearchParams();
   const { handleNavigateSignUp } = useAuthNavigation();
   const router = useRouter();
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+
+    if (code) {
+      toast.success("Email confirmed! You can now login.");
+      router.replace("/auth/sign-in");
+    }
+  }, [searchParams, router]);
+
   const {
     register,
     handleSubmit,

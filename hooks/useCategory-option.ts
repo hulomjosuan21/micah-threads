@@ -1,4 +1,4 @@
-import { fetchCategoriesOptions } from "@/actions/fetchCategoriesWithItems";
+import { fetchCategoriesOptions } from "@/actions/category-actions";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useCategoryOptions() {

@@ -28,7 +28,9 @@ export default function PublicHomePage({ user }: { user: User | null }) {
           </section>
 
           <section className="h-svh w-full shrink-0 snap-start">
-            {currentIndex === 1 && <CategoriesSection key="section-2" />}
+            {currentIndex === 1 && (
+              <CategoriesSection key="section-2" user={user} />
+            )}
           </section>
         </LayoutGroup>
       </main>
