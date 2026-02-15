@@ -37,7 +37,8 @@ export function SignInForm({
   ...props
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
-  const { handleNavigateSignUp } = useAuthNavigation();
+  const { handleNavigateSignUp, handleNavigateForgotPassword } =
+    useAuthNavigation();
   const router = useRouter();
 
   useEffect(() => {
@@ -111,7 +112,8 @@ export function SignInForm({
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <a
                     href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
+                    onClick={handleNavigateForgotPassword}
                   >
                     Forgot your password?
                   </a>

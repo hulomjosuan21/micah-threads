@@ -11,8 +11,13 @@ export default function useAuthNavigation() {
     router.push("/auth/sign-up");
   };
 
+  const handleNavigateForgotPassword = () => {
+    router.push("/forgot-password");
+  };
+
   return {
     handleNavigatoSignIn,
     handleNavigateSignUp,
+    handleNavigateForgotPassword,
   };
 }

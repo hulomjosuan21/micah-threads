@@ -1,6 +1,10 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
-import { Category, CategoryWithItemCountRow } from "@/types/category";
+import {
+  Category,
+  CategoryWithItemCountRow,
+  CategoryWithItemImagePaths,
+} from "@/types/category";
 import { NewCategoryFormValues } from "@/validators/category-schema";
 
 export async function addCategory(data: NewCategoryFormValues) {
@@ -88,4 +92,44 @@ export async function deleteCategory(categoryId: string) {
     console.error("Error deleting category:", error);
     throw new Error("Failed to delete category");
   }
+}
+
+export async function fetchAvailableCategorieWithItem(): Promise<
+  CategoryWithItemImagePaths[]
+> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("categories")
+    .select(
+      `
+      category_id,
+      label,
+      items (
+        images_paths,
+        stock
+      )
+    `,
+    )
+    .gt("items.stock", 0);
+
+  if (error) {
+    console.error("Error fetching categories with available items:", error);
+    throw new Error(error.message);
+  }
+
+  if (!data) return [];
+
+  const formatted: CategoryWithItemImagePaths[] = data.map((category) => {
+    const allImagePaths =
+      category.items?.flatMap((item) => item.images_paths ?? []) ?? [];
+
+    return {
+      categoryId: category.category_id,
+      label: category.label,
+      itemImagePaths: allImagePaths,
+    };
+  });
+
+  return formatted;
 }

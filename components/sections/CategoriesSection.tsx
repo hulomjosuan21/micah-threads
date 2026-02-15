@@ -18,10 +18,12 @@ import AccountSettingsDialog from "@/forms/AccountSettingsDialogForm";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import useUser from "@/hooks/useUser";
+import useAvailableCategorieWithItem from "@/hooks/useAvailableCategorieWithItem";
+import { SlidingCategoryCard } from "../SlidingCategoryCard";
 
 export default function CategoriesSection({ user }: { user: User | null }) {
   const router = useRouter();
-  const mockItemsCount = 12;
+  const { categories, categoriesIsLoading } = useAvailableCategorieWithItem();
   const { isLoading } = useUser();
 
   const fromTopRight = {
@@ -97,23 +99,27 @@ export default function CategoriesSection({ user }: { user: User | null }) {
 
       <div className="flex-1 overflow-hidden pl-6 pr-2 pb-6 max-w-200 justify-center w-full mx-auto">
         <ScrollArea className="h-full pr-4">
-          <div className="space-y-4">
-            {isLoading
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {categoriesIsLoading
               ? Array.from({ length: 8 }).map((_, index) => (
-                  <Card
+                  <div
                     key={`skeleton-${index}`}
-                    className="h-20 p-0 overflow-hidden rounded-md shadow-none border-0"
+                    className="relative aspect-square w-full overflow-hidden rounded-xl border"
                   >
-                    <Skeleton className="h-full w-full rounded-md" />
-                  </Card>
+                    <Skeleton className="absolute inset-0" />
+
+                    <div className="absolute inset-0 flex items-end justify-between p-4">
+                      <Skeleton className="h-5 w-18 rounded-sm bg-white/40" />
+
+                      <Skeleton className="h-9 w-9 rounded-sm bg-white/40" />
+                    </div>
+                  </div>
                 ))
-              : Array.from({ length: mockItemsCount }).map((_, index) => (
-                  <Card
-                    key={index}
-                    className="h-20 flex items-center px-4 text-base font-medium rounded-md shadow-none"
-                  >
-                    Category {index + 1}
-                  </Card>
+              : categories.map((category) => (
+                  <SlidingCategoryCard
+                    key={category.categoryId}
+                    category={category}
+                  />
                 ))}
           </div>
         </ScrollArea>
