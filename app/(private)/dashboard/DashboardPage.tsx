@@ -11,9 +11,9 @@ export default function DashboardPage() {
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div></div>
-        <div></div>
-        <CategorySection />
-        <div></div>
+        <div className="col-span-2">
+          <CategorySection />
+        </div>
       </div>
     </AppContent>
   );

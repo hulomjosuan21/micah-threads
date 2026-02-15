@@ -24,3 +24,33 @@ export async function fetchCategoriesWithItemCount(): Promise<
     itemCount: category.items?.[0]?.count ?? 0,
   }));
 }
+
+export async function updateCategory(
+  categoryId: string,
+  data: { label: string },
+) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("categories")
+    .update({ label: data.label })
+    .eq("category_id", categoryId);
+
+  if (error) {
+    console.error("Error updating category:", error);
+    throw new Error("Failed to update category");
+  }
+}
+
+export async function deleteCategory(categoryId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("categories")
+    .delete()
+    .eq("category_id", categoryId);
+
+  if (error) {
+    console.error("Error deleting category:", error);
+    throw new Error("Failed to delete category");
+  }
+}

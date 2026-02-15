@@ -7,13 +7,25 @@ import {
   DataTableToolbar,
 } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
+import AddCategoryDialogForm from "@/forms/AddCategoryDialogForm";
 import { CategoryWithItemCountRow } from "@/types/category";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef, Table } from "@tanstack/react-table";
-import { Plus } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreVertical } from "lucide-react";
+import useDeleteCategory from "@/hooks/useDeleteCategory";
+import UpdateCategoryDialogForm from "@/forms/EditCategoryDialogForm";
 
 export default function CategorySection() {
+  const { handleDeleteCategory } = useDeleteCategory();
   const [search, setSearch] = useState("");
   const {
     data = [],
@@ -35,8 +47,47 @@ export default function CategorySection() {
         accessorKey: "itemCount",
         header: "Item Count",
       },
+      {
+        accessorKey: "actions",
+        header: "",
+        cell: ({ row }) => {
+          const category = row.original;
+
+          return (
+            <div className="text-right">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <span className="sr-only">Open menu</span>
+                    <MoreVertical size={16} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <UpdateCategoryDialogForm
+                    categoryId={category.categoryId}
+                    defaultLabel={category.label}
+                    trigger={
+                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                        Edit
+                      </DropdownMenuItem>
+                    }
+                  />
+                  <DropdownMenuItem
+                    className="text-red-400"
+                    onSelect={() => handleDeleteCategory(category.categoryId)}
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          );
+        },
+      },
     ],
-    [],
+    [handleDeleteCategory],
   );
 
   const renderToolbar = useCallback(
@@ -49,10 +100,7 @@ export default function CategorySection() {
         showColumnVisibilityToggle={false}
         rightActions={
           <>
-            <Button size={"sm"}>
-              <Plus size={16} />
-              Add Category
-            </Button>
+            <AddCategoryDialogForm />
           </>
         }
       />

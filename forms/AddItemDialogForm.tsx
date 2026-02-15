@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useCategoryOptions from "@/hooks/useCategory-option";
-import { Plus, Sparkles, Loader2, Check } from "lucide-react";
+import { Plus, Sparkles, Loader2 } from "lucide-react";
 import { ProductFormValues, productSchema } from "@/validators/item-validator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertAction } from "@/components/reui/alert";
