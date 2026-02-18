@@ -13,7 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { CircleUserRound, LogOut, MoreVertical, Settings } from "lucide-react";
+import {
+  CircleUserRound,
+  LogOut,
+  MoreVertical,
+  Settings,
+  ShoppingBag,
+} from "lucide-react";
 import AccountSettingsDialog from "@/forms/AccountSettingsDialogForm";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
@@ -56,42 +62,52 @@ export default function CategoriesSection({ user }: { user: User | null }) {
               Browse items by category
             </motion.p>
           </div>
-          <div className="">
+          <div className="flex items-center gap-2">
             {user && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={isLoading || !user}
-                  >
-                    <span className="sr-only">Open menu</span>
-                    <Settings size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Settings</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={isLoading || !user}
+                >
+                  <span className="sr-only">Open menu</span>
+                  <ShoppingBag size={16} />
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={isLoading || !user}
+                    >
+                      <span className="sr-only">Open menu</span>
+                      <Settings size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
 
-                  <AccountSettingsDialog
-                    trigger={
-                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                        <CircleUserRound className="mr-2 size-4" />
-                        Account
-                      </DropdownMenuItem>
-                    }
-                  />
-                  <DropdownMenuSeparator />
+                    <AccountSettingsDialog
+                      trigger={
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <CircleUserRound className="mr-2 size-4" />
+                          Account
+                        </DropdownMenuItem>
+                      }
+                    />
+                    <DropdownMenuSeparator />
 
-                  <DropdownMenuItem
-                    className="text-destructive focus:text-destructive cursor-pointer"
-                    onSelect={() => router.push("/auth/sign-out")}
-                  >
-                    <LogOut className="mr-2 size-4" />
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive cursor-pointer"
+                      onSelect={() => router.push("/auth/sign-out")}
+                    >
+                      <LogOut className="mr-2 size-4" />
+                      Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             )}
           </div>
         </div>
